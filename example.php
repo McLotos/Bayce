@@ -1,3 +1,4 @@
+<php
 require 'ratings.class.php';
  
  $db = new dBase();
@@ -17,7 +18,8 @@ require 'ratings.class.php';
               );
                        
  $rating = new Rating($table, $bankList, $allRatings, 90, 10);
-
+ 
+ //for example I try to get all rating info for element (song, user, page or something else) with id=2
  $test['count']['zeroStars'] = $rating->getCount('2','0');
  $test['count']['oneStars'] = $rating->getCount('2','1');
  $test['count']['twoStars'] = $rating->getCount('2','2');
