@@ -16,7 +16,7 @@
  
  private $elems; //all elements
  private $allRatings; //all votes from ratings table
- private $maxLive = 90; //time to live vote vefore weight begin to decline
+ private $maxLive = 90; //time to live vote before weight begin to decline
  private $minVotesCount = 10; //min count of votes, to get into the rating
  private $countAllVotes; //count of all votes
  private $countNotNullVotes; //count of votes more than 0
