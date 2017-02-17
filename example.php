@@ -1,32 +1,89 @@
-<php
-require 'ratings.class.php';
- 
- $db = new dBase();
- 
- $sql = 'SELECT * FROM elems';
- $bankList = $db->select($sql, array());
- 
- $sql = 'SELECT `id`,`elem_id`, `vote`, `vote_date` FROM ratings WHERE `acepted`={?}';
- $allRatings = $db->select($sql, array('1'));
- 
- $table=array(
-                 'elem'=>'elem_id',
-                 'rating'=>'vote',
-                 'date'=>'vote_date',
-                 'eId'=>'id',
-                 'eName'=>'name'
-              );
-                       
- $rating = new Rating($table, $bankList, $allRatings, 90, 10);
- 
- //for example I try to get all rating info for element (song, user, page or something else) with id=2
- $test['count']['zeroStars'] = $rating->getCount('2','0');
- $test['count']['oneStars'] = $rating->getCount('2','1');
- $test['count']['twoStars'] = $rating->getCount('2','2');
- $test['count']['threeStars'] = $rating->getCount('2','3');
- $test['count']['fourStars'] = $rating->getCount('2','4');
- $test['count']['fiveStars'] = $rating->getCount('2','5');
- $test['count']['all'] = $rating->getCount('2','all');
- $test['count']['accepted'] = $rating->getCount('2','accepted');
- $test['oldRating'] = $rating->getCount('2','oldRating');
- $test['newRating'] = $rating->getCount('2','newRating');
+<?php
+
+$peoples = [
+    [
+        'name'=>'Alice',
+        'id' => 1,
+    ],
+    [
+        'name'=>'Bob',
+        'id' => 2,
+    ]
+];
+
+$reviews = [
+    [
+        'vote_rate'=>5,
+        'id' => 1,
+        'vote_date' => '2001-11-17 14:23:17',
+        'user_id' => 1
+    ],
+    [
+        'vote_rate'=>5,
+        'id' => 2,
+        'vote_date' => '2010-01-01 14:23:17',
+        'user_id' => 1
+    ],
+    [
+        'vote_rate'=>4,
+        'id' => 3,
+        'vote_date' => '2013-02-13 14:23:17',
+        'user_id' => 1
+    ],
+    [
+        'vote_rate'=>4,
+        'id' => 4,
+        'vote_date' => '2017-01-01 14:23:17',
+        'user_id' => 2
+    ],
+    [
+        'vote_rate'=>5,
+        'id' => 5,
+        'vote_date' => '2017-01-17 14:23:17',
+        'user_id' => 2
+    ],
+    [
+        'vote_rate'=>4,
+        'id' => 6,
+        'vote_date' => '2017-01-17 14:23:17',
+        'user_id' => 2
+    ]
+];
+
+include_once 'rating.class.php';
+
+$aliasses = [
+    // reviews
+    'elem' => 'user_id',
+    'rating' => 'vote_rate',
+    'date' => 'vote_date',
+    // peoples
+    'eId' => 'id',
+    'eName' => 'name'
+];
+$oldDays = 90;
+$minCount = 3;
+$rate = new \Rating($aliasses, $peoples, $reviews, $oldDays, $minCount);
+
+$rates = [
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    'all',
+    'accepted',
+    'oldRating',
+    'newRating'
+];
+
+$result = [];
+
+foreach ($peoples as $key => $row) {
+    foreach ($rates as $rateName){
+        $result[$row['id']][$rateName] = $rate->getCount($row['id'],$rateName);
+    }
+}
+
+print_r($result);
