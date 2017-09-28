@@ -24,6 +24,7 @@ class Rating
     private $countNotNullVotes; //count of votes more than 0
     private $currentRatingValue; //rating of current element
     private $amendment = 10; //statistic amendment
+    private $old_rate = [];
 
     public function __construct($table, $elemList, $allRatings, $voteMaxLive, $minVotesCount)
     {
@@ -39,7 +40,10 @@ class Rating
     {
         for ($i = 0; $i < count($this->elems); $i++) {
             if ($this->elems[$i]['elemId'] == $elemId) {
-                $this->getOldRating($i);
+                if(!array_key_exists($i,$this->old_rate)){
+                    $this->getOldRating($i);
+                    $this->old_rate[$i]=1;
+                }
                 switch ($rating) {
                     case '0':
                         return $this->elems[$i]['zeroStarsCount'];
